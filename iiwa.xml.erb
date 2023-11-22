@@ -1,0 +1,45 @@
+<%
+    require 'erb'
+    require 'matrix'
+    require_relative "iiwa"
+    require_relative "iiwaData"
+
+  
+
+    iiwa = IIWA.new(body_pose=[0,0,0.5,0,0,0,1],model="7")
+
+%>
+
+<mujoco>
+
+  <compiler angle="radian" meshdir="assets" autolimits="true"/>
+  <option integrator="implicitfast"/>
+
+  <default>
+    <%=iiwa.default_xml%>
+  </default>
+
+  <asset>
+    <!-- floor  -->
+    <texture  name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".1 .2 .3" rgb2=".2 .3 .4"/>
+    <material name="grid" texture="grid" texrepeat="1 1" texuniform="true" reflectance=".2"/>
+    <!-- robot  -->
+    <%=iiwa.assets_xml%>
+  </asset>
+
+  <worldbody>
+    <!-- floor  -->
+    <geom  type="plane" size="3 3 .01" material="grid"/>
+    <!-- robot  -->
+    <%=iiwa.body_xml%>
+  </worldbody>
+
+  <contact>
+     <%=iiwa.contact_xml%>
+  </contact>
+
+  <actuator>
+    <%=iiwa.actuator_xml%>
+  </actuator>
+
+</mujoco>

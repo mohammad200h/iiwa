@@ -1,0 +1,49 @@
+<%
+    require 'erb'
+    require 'quaternion'
+    require 'matrix'
+    require_relative "iiwas"
+    require_relative'Utility'
+
+    euler_1 = [0,-20,0]
+    euler_2 = [0,20,0]
+
+    pose_iiwa_1 =[0  ,0 ,0 ]+ euler_to_quaternion(anglesToRadian(euler_1))
+    pose_iiwa_2 =[1,0 ,0 ]+ euler_to_quaternion(anglesToRadian(euler_2))
+
+
+    poses =[
+      pose_iiwa_1,
+      pose_iiwa_2
+    ]
+
+    iiwas = IIWAS.new(poses,"7")
+
+%>
+
+<mujoco>
+
+  <compiler angle="radian" meshdir="assets" autolimits="true"/>
+  <option integrator="implicitfast"/>
+
+  <default>
+    <%=iiwas.default_xml%>
+  </default>
+
+  <asset>
+    <%=iiwas.assets_xml%>
+  </asset>
+
+  <worldbody>
+    <%=iiwas.body_xml%>
+  </worldbody>
+
+  <contact>
+     <%=iiwas.contact_xml%>
+  </contact>
+
+  <actuator>
+    <%=iiwas.actuator_xml%>
+  </actuator>
+
+</mujoco>

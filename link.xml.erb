@@ -1,0 +1,23 @@
+<% 
+    require 'erb'
+    require 'matrix'
+    require_relative "link"
+    require_relative "iiwaData"
+   
+    links = get_iiwa14()
+   
+    link = Link.new(links[0])
+  
+%>
+
+<mujoco>
+  <compiler meshdir="assets/meshes" texturedir="assets/textures" autolimits="true"/>
+ 
+
+
+  <worldbody>
+    <%=link.body_xml%>
+  </worldbody>
+
+ 
+</mujoco>

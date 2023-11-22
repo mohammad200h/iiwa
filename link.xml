@@ -1,0 +1,42 @@
+
+
+<mujoco>
+  <compiler meshdir="assets/meshes" texturedir="assets/textures" autolimits="true"/>
+ 
+
+
+  <worldbody>
+    
+    <body>
+      <geom class="visual"  mesh="link_0"   />
+  
+        <geom class="collision" size="0.12" pos="0 0 0.03"/>
+      <geom class="collision" size="0.08" pos="-0.08 0 0.103"/>
+      <geom class="collision" size="0.08" pos="-0.08 0 0.04"/>
+      <geom class="collision" size="0.1" pos="0 0 0.14"/>
+    
+
+        
+  <body>
+    <geom class="visual"  mesh="link_1"   />
+
+      <geom class="collision" size="0.08" pos="0 0 -0.0005"/>
+    <geom class="collision" size="0.075" pos="0.01 -0.025 0.0425"/>
+    <geom class="collision" size="0.075" pos="-0.01 -0.025 0.0425"/>
+    <geom class="collision" size="0.07" pos="0.01 -0.045 0.1025"/>
+    <geom class="collision" size="0.07" pos="-0.01 -0.045 0.1025"/>
+  
+
+      
+    
+  </body>
+
+
+      
+    </body>
+
+  
+  </worldbody>
+
+ 
+</mujoco>
