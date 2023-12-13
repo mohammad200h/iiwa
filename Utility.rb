@@ -2,6 +2,9 @@
     require 'erb'
     require 'matrix'
 
+
+
+
   def euler_to_quaternion(rpy)
       roll  = rpy[0]
       pitch = rpy[1]

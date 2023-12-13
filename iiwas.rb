@@ -7,14 +7,14 @@ require_relative "iiwaData"
 
 class IIWAS
   attr_accessor :default_xml,:assets_xml,:body_xml,:contact_xml,:actuator_xml
-  def initialize(poses,model="14")
+  def initialize(poses,model="7",children=nil)
 
     commen_xml = IIWA.new(body_pose=[0,0,0,0,0,0,1],model=model)
     robots = []
     for i in 0...poses.length
       pose = poses[i]
 
-      iiwa = IIWA.new(pose,model,i.to_s)
+      iiwa = IIWA.new(pose,model,children,i.to_s)
       robots.push(iiwa)
     end
 

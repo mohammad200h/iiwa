@@ -4,13 +4,13 @@ require 'matrix'
 require_relative "Utility"
 require_relative "iiwaData"
 
-
+# puts "I am the link file being imported "
 
 
 class Link
   attr_accessor :body_xml,:joint
-  def initialize(data,compute_inertia=true,child=nil,base_pose=nil)
-
+  def initialize(data,compute_inertia=true,child=nil,collision_class=0,base_pose=nil)
+    # puts "link"
     link_name = data["name"]
 
     childclass = data.key?("childclass") ? data["childclass"] : nil
@@ -120,7 +120,7 @@ class Link
     c_l.each do |c|
       material_xml =  c.key?("mat")  ?     %{ material="#{c["mat"]}" }.gsub(/^  /, '') : nil
 
-      c_xml = %{  <geom class="collision" size="#{c["size"]}" pos="#{a_to_s(c["pos"])}" #{material_xml}/>
+      c_xml = %{  <geom class="collision_#{collision_class}" size="#{c["size"]}" pos="#{a_to_s(c["pos"])}"/>
       }
 
       collisions_xml += c_xml

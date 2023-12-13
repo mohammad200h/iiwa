@@ -1,14 +1,14 @@
 
 require 'erb'
 require 'matrix'
-require_relative "Utility"
+require_relative "../utility/Utility"
 require_relative "iiwaData"
 require_relative "link"
 
 
 class IIWA
   attr_accessor :default_xml,:assets_xml,:body_xml,:contact_xml,:actuator_xml,:name,:joints
-  def initialize(body_pose=[0,0,0,0,0,0,1],model="14",prefix=nil,compute_inertia=true)
+  def initialize(body_pose=[0,0,0,0,0,0,1],model="14",children=nil,prefix=nil,compute_inertia=true)
 
     data =  get_iiwa(model,prefix)
     links,actuators,defaults,common_meshes,robot_meshes,materials,prefix = data
@@ -16,22 +16,35 @@ class IIWA
     @joints = []
 
 
+
     asset_path = File.join(File.dirname(__FILE__),'assets')
     # puts asset_path
     ##### bodies #######
-
     parent_link = nil
-    child_link = Link.new(links[links.length-1],compute_inertia)
-    (links.length-1).downto(1) do |counter|
+    # puts links[links.length-1]
+    # puts compute_inertia
+    # puts children
 
-      parent_link = Link.new(links[counter-1],compute_inertia,child_link)
+    collision_class = 0
+    child_link = Link.new(links[links.length-1],compute_inertia,children,collision_class)
+    (links.length-1).downto(1) do |counter|
+      if collision_class ==0
+        collision_class = 1
+      else
+        collision_class = 0
+      end
+      parent_link = Link.new(links[counter-1],compute_inertia,child_link,collision_class)
       # if base link
       if counter ==1
-        parent_link = Link.new(links[counter-1],compute_inertia,child_link,body_pose)
+        parent_link = Link.new(links[counter-1],compute_inertia,child_link,collision_class,body_pose)
       end
+
       child_link = parent_link
 
+
     end
+
+
 
     ######## assets ########
     class_name = "iiwa"
@@ -88,7 +101,13 @@ class IIWA
             <geom type="mesh" group="4" />
           </default>
           <default class="collision">
-            <geom group="3"   mass="0"/>
+            <geom group="3" mass="0"/>
+            <default class="collision_0">
+              <geom  material="green"/>
+            </default>
+            <default class="collision_1">
+              <geom  material="light_orange"/>
+            </default>
           </default>
           <site size="0.001" rgba="1 0 0 1" group="4" />
         </default>
@@ -101,6 +120,8 @@ class IIWA
 
 
     }.gsub(/^ /, '')
+
+
 
     ########## generate contact ########
     @contact_xml = %{<exclude body1="#{links[0]["name"]}" body2="#{links[1]["name"]}"/>}
